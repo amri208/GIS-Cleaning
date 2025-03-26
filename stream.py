@@ -690,32 +690,33 @@ if uploaded_file is not None:
             
             if selected_option=='44.06':
                 concatenated_df = []
-                for file in uploaded_file:
-                    df_4408     =    pd.read_excel(file, header=3).fillna('')
-
-                    df_4406['No Formula #'] = df_4406['Unnamed: 7'].where(df_4406['Unnamed: 2'] == 'No Formula #')
-                    df_4406['Produk Utama'] = df_4406['Unnamed: 7'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
-                    df_4406['Kuantitas BOM'] = df_4406['Unnamed: 7'].shift(-2).where(df_4406['Unnamed: 2'] == 'No Formula #')
-                    df_4406['Berlaku di Cabang'] = df_4406['Unnamed: 20'].where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
-                    
-                    df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang']] = df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang']].fillna(method='ffill')
-                    df_4406[['Kuantitas BOM', 'Satuan BOM']] = df_4406['Kuantitas BOM'].str.split(' ', n=1, expand=True)
-
-                    df_4406     =   df_4406.rename(columns={'Unnamed: 5'        :   'Kode #',
-                                                            'Unnamed: 11'       :   'Nama Barang',
-                                                            'Unnamed: 13'       :   'Satuan',
-                                                            'Unnamed: 17'       :   'Kuantitas',
-                                                            'Unnamed: 22'       :   'Harga Standar',
-                                                            'Unnamed: 24'       :   'Total Harga Standar',
-                                                            'Berlaku di Cabang' :   'Cabang',
-                                                            'Satuan'            :   'Satuan Barang'
-                                                            'Kuantitas'         :   'Kuantitas Barang'}).fillna("")
-                    
-                    df_4406     =   df_4406.loc[:, ~df_4406.columns.str.startswith('Unnamed:')]
-                    df_4406     =   df_4406[df_4406['Kode #'] != ""]
-                    df_4406     =   df_4406[df_4406['Kode #'] != "Kode #"]
-                    df_4406     =   df_4406.loc[:,['Cabang', 'No Formula #', 'Produk Utama', 'Satuan BOM', 'Kuantitas BOM', 'Kode #', 'Nama Barang', 'Satuan', 'Kuantitas', 'Harga Standar', 'Total Harga Standar']]
-                    concatenated_df.append(df_4408)
+                if uploaded_file:
+                    for file in uploaded_file:
+                        df_4408     =    pd.read_excel(file, header=3).fillna('')
+    
+                        df_4406['No Formula #'] = df_4406['Unnamed: 7'].where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Produk Utama'] = df_4406['Unnamed: 7'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Kuantitas BOM'] = df_4406['Unnamed: 7'].shift(-2).where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Berlaku di Cabang'] = df_4406['Unnamed: 20'].where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
+                        
+                        df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang']] = df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang']].fillna(method='ffill')
+                        df_4406[['Kuantitas BOM', 'Satuan BOM']] = df_4406['Kuantitas BOM'].str.split(' ', n=1, expand=True)
+    
+                        df_4406     =   df_4406.rename(columns={'Unnamed: 5'        :   'Kode #',
+                                                                'Unnamed: 11'       :   'Nama Barang',
+                                                                'Unnamed: 13'       :   'Satuan',
+                                                                'Unnamed: 17'       :   'Kuantitas',
+                                                                'Unnamed: 22'       :   'Harga Standar',
+                                                                'Unnamed: 24'       :   'Total Harga Standar',
+                                                                'Berlaku di Cabang' :   'Cabang',
+                                                                'Satuan'            :   'Satuan Barang'
+                                                                'Kuantitas'         :   'Kuantitas Barang'}).fillna("")
+                        
+                        df_4406     =   df_4406.loc[:, ~df_4406.columns.str.startswith('Unnamed:')]
+                        df_4406     =   df_4406[df_4406['Kode #'] != ""]
+                        df_4406     =   df_4406[df_4406['Kode #'] != "Kode #"]
+                        df_4406     =   df_4406.loc[:,['Cabang', 'No Formula #', 'Produk Utama', 'Satuan BOM', 'Kuantitas BOM', 'Kode #', 'Nama Barang', 'Satuan', 'Kuantitas', 'Harga Standar', 'Total Harga Standar']]
+                        concatenated_df.append(df_4408)
                     
                 concatenated_df = pd.concat(concatenated_df, ignore_index=True)
                 excel_data = to_excel(concatenated_df)
