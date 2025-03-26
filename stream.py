@@ -729,12 +729,13 @@ if uploaded_file is not None:
                 
             if selected_option=='44.08':
                 concatenated_df = []
-                for file in uploaded_file:
-                    df_4408     =   pd.read_excel(file, header=4).fillna('')
-                    df_4408 = df_4408[[x for x in df_4408.columns if 'Unnamed' not in x]]
-                    df_4408 = df_4408.iloc[:-5]
-
-                    concatenated_df.append(df_4408)
+                if uploaded_file:
+                    for file in uploaded_file:
+                        df_4408     =   pd.read_excel(file, header=4).fillna('')
+                        df_4408 = df_4408[[x for x in df_4408.columns if 'Unnamed' not in x]]
+                        df_4408 = df_4408.iloc[:-5]
+    
+                        concatenated_df.append(df_4408)
                     
                 concatenated_df = pd.concat(concatenated_df, ignore_index=True)
                 excel_data = to_excel(concatenated_df)
