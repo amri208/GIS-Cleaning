@@ -692,7 +692,7 @@ if uploaded_file is not None:
                 concatenated_df = []
                 if uploaded_file:
                     for file in uploaded_file:
-                        df_4408     =    pd.read_excel(file, header=3).fillna('')
+                        df_4406     =    pd.read_excel(file, header=3).fillna('')
     
                         df_4406['No Formula #'] = df_4406['Unnamed: 7'].where(df_4406['Unnamed: 2'] == 'No Formula #')
                         df_4406['Produk Utama'] = df_4406['Unnamed: 7'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
@@ -709,14 +709,14 @@ if uploaded_file is not None:
                                                                 'Unnamed: 22'       :   'Harga Standar',
                                                                 'Unnamed: 24'       :   'Total Harga Standar',
                                                                 'Berlaku di Cabang' :   'Cabang',
-                                                                'Satuan'            :   'Satuan Barang'
+                                                                'Satuan'            :   'Satuan Barang',
                                                                 'Kuantitas'         :   'Kuantitas Barang'}).fillna("")
                         
                         df_4406     =   df_4406.loc[:, ~df_4406.columns.str.startswith('Unnamed:')]
                         df_4406     =   df_4406[df_4406['Kode #'] != ""]
                         df_4406     =   df_4406[df_4406['Kode #'] != "Kode #"]
                         df_4406     =   df_4406.loc[:,['Cabang', 'No Formula #', 'Produk Utama', 'Satuan BOM', 'Kuantitas BOM', 'Kode #', 'Nama Barang', 'Satuan', 'Kuantitas', 'Harga Standar', 'Total Harga Standar']]
-                        concatenated_df.append(df_4408)
+                        concatenated_df.append(df_4406)
                     
                 concatenated_df = pd.concat(concatenated_df, ignore_index=True)
                 excel_data = to_excel(concatenated_df)
