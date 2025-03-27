@@ -694,12 +694,14 @@ if uploaded_file is not None:
                     for file in uploaded_file:
                         df_4406     =    pd.read_excel(file, header=3).fillna('')
     
-                        df_4406['No Formula #'] = df_4406['Unnamed: 7'].where(df_4406['Unnamed: 2'] == 'No Formula #')
-                        df_4406['Produk Utama'] = df_4406['Unnamed: 7'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
-                        df_4406['Kuantitas BOM'] = df_4406['Unnamed: 7'].shift(-2).where(df_4406['Unnamed: 2'] == 'No Formula #')
-                        df_4406['Berlaku di Cabang'] = df_4406['Unnamed: 20'].where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
+                        df_4406['No Formula #']         = df_4406['Unnamed: 7'].where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Produk Utama']         = df_4406['Unnamed: 7'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Kuantitas BOM']        = df_4406['Unnamed: 7'].shift(-2).where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Berlaku di Cabang']    = df_4406['Unnamed: 20'].where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
+                        df_4406['Non Aktif']            = df_4406['Unnamed: 22'].shift(-2).where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
+
                         
-                        df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang']] = df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang']].fillna(method='ffill')
+                        df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang','Non Aktif']] = df_4406[['No Formula #', 'Produk Utama', 'Kuantitas BOM','Berlaku di Cabang','Non Aktif']].fillna(method='ffill')
                         df_4406[['Kuantitas BOM', 'Satuan BOM']] = df_4406['Kuantitas BOM'].str.split(' ', n=1, expand=True)
     
                         df_4406     =   df_4406.rename(columns={'Unnamed: 5'        :   'Kode #',
@@ -715,7 +717,7 @@ if uploaded_file is not None:
                         df_4406     =   df_4406.loc[:, ~df_4406.columns.str.startswith('Unnamed:')]
                         df_4406     =   df_4406[df_4406['Kode #'] != ""]
                         df_4406     =   df_4406[df_4406['Kode #'] != "Kode #"]
-                        df_4406     =   df_4406.loc[:,['Cabang', 'No Formula #', 'Produk Utama', 'Satuan BOM', 'Kuantitas BOM', 'Kode #', 'Nama Barang', 'Satuan', 'Kuantitas', 'Harga Standar', 'Total Harga Standar']]
+                        df_4406     =   df_4406.loc[:,['Cabang', 'No Formula #', 'Produk Utama', 'Satuan BOM', 'Kuantitas BOM', 'Non Aktif', 'Kode #', 'Nama Barang', 'Satuan', 'Kuantitas', 'Harga Standar', 'Total Harga Standar']]
                         concatenated_df.append(df_4406)
                     
                 concatenated_df = pd.concat(concatenated_df, ignore_index=True)
