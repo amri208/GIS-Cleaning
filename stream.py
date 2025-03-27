@@ -694,10 +694,10 @@ if uploaded_file is not None:
                     for file in uploaded_file:
                         df_4406     =    pd.read_excel(file, header=3).fillna('')
     
-                        df_4406['No Formula #']         = df_4406['Unnamed: 7'].where(df_4406['Unnamed: 2'] == 'No Formula #')
-                        df_4406['Produk Utama']         = df_4406['Unnamed: 7'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
-                        df_4406['Kuantitas BOM']        = df_4406['Unnamed: 7'].shift(-2).where(df_4406['Unnamed: 2'] == 'No Formula #')
-                        df_4406['Berlaku di Cabang']    = df_4406['Unnamed: 20'].where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
+                        df_4406['No Formula #']         = df_4406['Unnamed: 8'].where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Produk Utama']         = df_4406['Unnamed: 8'].shift(-1).where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Kuantitas BOM']        = df_4406['Unnamed: 8'].shift(-2).where(df_4406['Unnamed: 2'] == 'No Formula #')
+                        df_4406['Berlaku di Cabang']    = df_4406['Unnamed: 22'].where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
                         df_4406['Non Aktif']            = df_4406['Unnamed: 22'].shift(-2).where(df_4406['Unnamed: 15'] == 'Berlaku di Cabang')
 
                         
