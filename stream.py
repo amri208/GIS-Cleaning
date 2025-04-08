@@ -26,7 +26,7 @@ def load_excel(file_path):
     return model
 
 st.title('GIS')
-selected_option = st.selectbox("Pilih salah satu:", ['13.01','13.10','13.66','22.05','22.16','22.19','32.07','32.15','32.23','41.01','41.04','41.04.B','41.09','42.05','42.06','42.08','42.15','42.17','42.18','44.06','44.08','99.01'])
+selected_option = st.selectbox("Pilih salah satu:", ['13.01','13.10','13.66','22.05','22.16','22.19','32.07','32.15','32.23','32.24','41.01','41.04','41.04.B','41.09','42.05','42.06','42.08','42.15','42.17','42.18','44.06','44.08','99.01'])
 uploaded_file = st.file_uploader("Upload File", type="xlsx", accept_multiple_files=True)
 
 def get_current_time_gmt7():
@@ -329,7 +329,24 @@ if uploaded_file is not None:
                     file_name=f'32.23_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )   
-                
+
+            if selected_option=='32.24':
+                concatenated_df = []
+                for file in uploaded_file:
+                    df_3224 = pd.read_excel(file, skiprows=range(0, 4))
+                    df_3224 = df_3224.loc[:,['Tanggal','Nomor # PO','Nomor # RI','Pemasok','Kode #','Nama Barang','Kts Terima','Satuan','@Harga','Total Harga','#Kts Ditagih','Nama Gudang','Nama Cabang Penerimaan Barang','Status Penerimaan Barang','Pembuat Data','Tgl/Jam Pembuatan']]
+                    df_3224 = df_3224[df_3224['Nomor # PO' ] != ""]
+                    concatenated_df.append(df_3224)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True)
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'32.24_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )   
+            
             if selected_option=='41.01':
                 concatenated_df = []
                 for file in uploaded_file:
