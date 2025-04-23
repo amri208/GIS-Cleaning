@@ -499,17 +499,15 @@ if uploaded_file is not None:
             if selected_option=='42.02':
                 concatenated_df = []
                 for file in uploaded_file:
-                    file_name = os.path.basename(file_name)
+                    file_name = os.path.basename(file.name)
                     
                     match = re.search(r'_(\d{4}\.[A-Z]+)', file_name)
                     cabang = match.group(1) if match else ''
                     
                     df_4202 = pd.read_excel(file_path, header=4).fillna('')
                     
-                    # Hapus kolom yang namanya mulai dengan 'Unnamed'
                     df_4202 = df_4202.loc[:, ~df.columns.str.startswith('Unnamed')]
                     
-                    # Tambahkan kolom 'Cabang'
                     df_4202['Cabang'] = cabang                    
                     concatenated_df.append(df_4202)
                     
