@@ -240,7 +240,6 @@ if uploaded_file is not None:
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )   
 
-            
             if selected_option=='32.07':
                 concatenated_df = []
                 for file in uploaded_file:
@@ -495,8 +494,34 @@ if uploaded_file is not None:
                     data=excel_data,
                     file_name=f'41.09_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )   
-                
+                )
+
+            if selected_option=='42.02':
+                concatenated_df = []
+                for file in uploaded_file:
+                    file_name = os.path.basename(uploaded_file)
+                    
+                    match = re.search(r'_(\d{4}\.[A-Z]+)', file_name)
+                    cabang = match.group(1) if match else ''
+                    
+                    df_4202 = pd.read_excel(file_path, header=4).fillna('')
+                    
+                    # Hapus kolom yang namanya mulai dengan 'Unnamed'
+                    df_4202 = df_4202.loc[:, ~df.columns.str.startswith('Unnamed')]
+                    
+                    # Tambahkan kolom 'Cabang'
+                    df_4202['Cabang'] = cabang                    
+                    concatenated_df.append(df_4202)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True)
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'42.02_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )
+
             if selected_option=='42.05':
                 concatenated_df = []
                 for file in uploaded_file:
@@ -519,7 +544,7 @@ if uploaded_file is not None:
                     data=excel_data,
                     file_name=f'42.05_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )   
+                )
                 
             if selected_option=='42.06':
                 concatenated_df = []
