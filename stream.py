@@ -499,7 +499,7 @@ if uploaded_file is not None:
             if selected_option=='42.02':
                 concatenated_df = []
                 for file in uploaded_file:
-                    file_name = os.path.basename(uploaded_file)
+                    file_name = os.path.basename(file_name)
                     
                     match = re.search(r'_(\d{4}\.[A-Z]+)', file_name)
                     cabang = match.group(1) if match else ''
