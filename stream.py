@@ -506,7 +506,7 @@ if uploaded_file is not None:
                     
                     df_4202 = pd.read_excel(file, header=4).fillna('')
                     
-                    df_4202 = df_4202.loc[:, ~df.columns.str.startswith('Unnamed')]
+                    df_4202 = df_4202.loc[:, ~df_4202.columns.str.startswith('Unnamed')]
                     
                     df_4202['Cabang'] = cabang                    
                     concatenated_df.append(df_4202)
