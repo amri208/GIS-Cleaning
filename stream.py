@@ -504,7 +504,7 @@ if uploaded_file is not None:
                     match = re.search(r'_(\d{4}\.[A-Z]+)', file_name)
                     cabang = match.group(1) if match else ''
                     
-                    df_4202 = pd.read_excel(file_path, header=4).fillna('')
+                    df_4202 = pd.read_excel(file, header=4).fillna('')
                     
                     df_4202 = df_4202.loc[:, ~df.columns.str.startswith('Unnamed')]
                     
