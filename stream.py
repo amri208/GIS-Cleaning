@@ -26,7 +26,7 @@ def load_excel(file_path):
     return model
 
 st.title('GIS')
-selected_option = st.selectbox("Pilih salah satu:", ['13.01','13.10','13.33','13.55','13.66','22.05','22.16','22.19','32.07','32.15','32.23','32.24','41.01','41.04','41.04.B','41.09','42.02','42.05','42.06','42.08','42.15','42.17','42.18','44.06','44.08','99.01'])
+selected_option = st.selectbox("Pilih salah satu:", ['13.01','13.10','13.22','13.31','13.33','13.55','13.66','22.05','22.16','22.19','32.07','32.15','32.23','32.24','32.43','41.01','41.04','41.04.B','41.09','42.02','42.05','42.06','42.08','42.15','42.17','42.18','44.06','44.08','51.01','99.01'])
 uploaded_file = st.file_uploader("Upload File", type="xlsx", accept_multiple_files=True)
 
 def get_current_time_gmt7():
@@ -98,6 +98,38 @@ if uploaded_file is not None:
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )   
 
+            if selected_option=='13.22':
+                concatenated_df = []
+                for file in uploaded_file:
+                    df_1322 = pd.read_excel(file, skiprows=4).fillna('')
+                    df_1322 = df_1322[~df_1322['Tanggal'].isna()][[x for x in df_1322.columns if 'Unnamed' not in x]]
+                    concatenated_df.append(df_1322)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True) 
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'13.22_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )  
+
+            if selected_option=='13.31':
+                concatenated_df = []
+                for file in uploaded_file:
+                    df_1331 = pd.read_excel(file, skiprows=4).fillna('')
+                    df_1331 = df_1331[~df_1331['Tanggal'].isna()][[x for x in df_1331.columns if 'Unnamed' not in x]]
+                    concatenated_df.append(df_1331)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True) 
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'13.31_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )  
+                
             if selected_option=='13.33':
                 concatenated_df = []
                 for file in uploaded_file:
@@ -377,7 +409,23 @@ if uploaded_file is not None:
                     file_name=f'32.24_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )   
-            
+
+            if selected_option=='32.43':
+                concatenated_df = []
+                for file in uploaded_file:
+                    df_3243 = pd.read_excel(file, skiprows=4).fillna('')
+                    df_3243 = df_3243[~df_3243['Tanggal'].isna()][[x for x in df_3243.columns if 'Unnamed' not in x]]
+                    concatenated_df.append(df_3243)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True) 
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'32.43_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )  
+                
             if selected_option=='41.01':
                 concatenated_df = []
                 for file in uploaded_file:
@@ -818,6 +866,22 @@ if uploaded_file is not None:
                     file_name=f'44.08_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )   
+
+            if selected_option=='51.01':
+                concatenated_df = []
+                for file in uploaded_file:
+                    df_5101 = pd.read_excel(file, skiprows=4).fillna('')
+                    df_5101 = df_5101[~df_5101['Tgl/Jam Pembuatan'].isna()][[x for x in df_5101.columns if 'Unnamed' not in x]]
+                    concatenated_df.append(df_5101)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True) 
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'51.01_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )  
                 
             if selected_option=='99.01':
                 # URL file model .pkl di GitHub (gunakan URL raw dari file .pkl di GitHub)
