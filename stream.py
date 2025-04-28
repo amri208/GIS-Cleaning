@@ -814,7 +814,7 @@ if uploaded_file is not None:
                             else:
                                 return cabang
                     
-                    df_4217_final['Nama Cabang'] = df_4217_final['Nama Cabang'].apply(format_nama_cabang)
+                    df_4217_final['Cabang'] = df_4217_final['Nama Cabang'].apply(format_nama_cabang)
 
                 concatenated_df = pd.concat(df_4217_final, ignore_index=True)
                 excel_data = to_excel(concatenated_df)
