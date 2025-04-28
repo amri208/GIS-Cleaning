@@ -801,7 +801,7 @@ if uploaded_file is not None:
                     df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Nama Cabang"]]
                     df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
 
-                    df_4217_final = concatenated_df.append(df_4217_final)
+                    concatenated_df.append(df_4217_final)
                     
                     def format_nama_cabang(cabang):
                         match1 = re.match(r"\((\d+),\s*([A-Z]+)\)", cabang)
