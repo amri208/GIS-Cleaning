@@ -801,18 +801,22 @@ if uploaded_file is not None:
                     df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Nama Cabang"]]
                     df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
 
-                    df_4217rev = concatenated_df.append(df_4217_final)
+                    df_4217_final = concatenated_df.append(df_4217_final)
                     
                     def format_nama_cabang(cabang):
-                        match = re.match(r"(\d+\.\d+)-[A-Za-z\s\(\)-]+(?:\s\((\w+)\))?", cabang)
-                        if match:
-                            return f"{int(float(match.group(1)))-1}.{match.group(2)}" if match.group(2) else None
+                        match1 = re.match(r"\((\d+),\s*([A-Z]+)\)", cabang)
+                        if match1:
+                            return f"{match1.group(1)}.{match1.group(2)}"
                         else:
-                            return cabang
+                            match2 = re.match(r"^(\d+)\..*?\((.*?)\)$", cabang)
+                            if match2:
+                                return f"{match2.group(1)}.{match2.group(2)}"
+                            else:
+                                return cabang
                     
-                    df_4217rev['Nama Cabang'] = df_4217['Nama Cabang'].apply(format_nama_cabang)
+                    df_4217_final['Nama Cabang'] = df_4217_final['Nama Cabang'].apply(format_nama_cabang)
 
-                concatenated_df = pd.concat(df_4217rev, ignore_index=True)
+                concatenated_df = pd.concat(df_4217_final, ignore_index=True)
                 excel_data = to_excel(concatenated_df)
                 st.download_button(
                     label="Download Excel",
