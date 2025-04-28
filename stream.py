@@ -26,7 +26,7 @@ def load_excel(file_path):
     return model
 
 st.title('GIS')
-selected_option = st.selectbox("Pilih salah satu:", ['13.01','13.10','13.22','13.31','13.33','13.55','13.66','22.05','22.16','22.19','32.07','32.15','32.23','32.24','32.43','41.01','41.04','41.04.B','41.09','42.02','42.05','42.06','42.08','42.15','42.17','42.18','44.06','44.08','51.01','99.01'])
+selected_option = st.selectbox("Pilih salah satu:", ['13.01','13.10','13.22','13.31','13.33','13.55','13.66','22.05','22.16','22.19','32.07','32.15','32.23','32.24','32.43','41.01','41.04','41.04.B','41.09','42.02','42.05','42.06','42.08','42.15','42.17','42.17 (Rev1)','42.18','44.06','44.08','51.01','99.01'])
 uploaded_file = st.file_uploader("Upload File", type="xlsx", accept_multiple_files=True)
 
 def get_current_time_gmt7():
@@ -765,6 +765,59 @@ if uploaded_file is not None:
                     label="Download Excel",
                     data=excel_data,
                     file_name=f'42.17_{get_current_time_gmt7()}.xlsx',
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )
+
+            if selected_option=='42.17 (Rev1)':
+                concatenated_df = []
+                for file in uploaded_file:
+                    df_4217     =   pd.read_excel(file, header=4).fillna('')
+                    df_4217 = df_4217.drop(columns=[x for x in df_4217.reset_index().T[(df_4217.reset_index().T[1]=='')].index if 'Unnamed' in x])
+                    df_4217.columns = df_4217.T.reset_index()['index'].apply(lambda x: np.nan if 'Unnamed' in x else x).ffill().values
+                    df_4217 = df_4217.iloc[1:,:-3]
+                    
+                    df_melted =pd.melt(df_4217, id_vars=['Kode Barang', 'Nama Barang','Kategori Barang'], 
+                        value_vars=df_4217.columns[6:].values,
+                        var_name='Nama Cabang', value_name='Total Stok').reset_index(drop=True)
+    
+                    df_melted2 = pd.melt(pd.melt(df_4217, id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Satuan #1','Satuan #2','Satuan #3'], 
+                        value_vars=df_4217.columns[6:].values,
+                        var_name='Nama Cabang', value_name='Total Stok').drop_duplicates(),
+                        id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Nama Cabang','Total Stok'],
+                        var_name='Variabel', value_name='Satuan')
+    
+                    df_melted2 = df_melted2[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Satuan','Variabel']].drop_duplicates().reset_index(drop=True)
+    
+                    df_melted = df_melted.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
+                    df_melted2 = df_melted2.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
+                    
+                    df_4217_final = pd.concat([df_melted2, df_melted[['Total Stok']]], axis=1)
+                    df_4217_final = df_4217_final.rename(columns={'Variabel':'Kategori'})[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Kategori','Satuan','Total Stok']]
+                    df_4217_final['Kode Barang'] = df_4217_final['Kode Barang'].astype('int')
+                    df_4217_final['Total Stok'] = df_4217_final['Total Stok'].astype('float')
+
+                    def format_nama_cabang(cabang):
+                        match = re.match(r"(\d+\.\d+)-[A-Za-z\s\(\)-]+(?:\s\((\w+)\))?", cabang)
+                        if match:
+                            return f"{int(float(match.group(1)))-1}.{match.group(2)}" if match.group(2) else None
+                        else:
+                            return cabang
+
+                    df_4217['Nama Cabang'] = df_4217['Nama Cabang'].apply(format_nama_cabang)
+
+                    df_4217_final=df_4217_final[df_4217_final['Kategori']   ==  "Satuan #1"].rename(columns={"Kategori":"Satuan","Total Stock":"Saldo Akhir"})
+
+                    df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan",""]]
+                    df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
+
+                    concatenated_df.append(df_4217_final)
+                    
+                concatenated_df = pd.concat(concatenated_df, ignore_index=True)
+                excel_data = to_excel(concatenated_df)
+                st.download_button(
+                    label="Download Excel",
+                    data=excel_data,
+                    file_name=f'42.17 (Rev1)_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 )   
                 
