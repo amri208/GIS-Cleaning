@@ -796,23 +796,23 @@ if uploaded_file is not None:
                     df_4217_final['Kode Barang'] = df_4217_final['Kode Barang'].astype('int')
                     df_4217_final['Total Stok'] = df_4217_final['Total Stok'].astype('float')
 
+                    df_4217_final=df_4217_final[df_4217_final['Kategori']   ==  "Satuan #1"].rename(columns={"Kategori":"Satuan","Total Stock":"Saldo Akhir"})
+
+                    df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Nama Cabang"]]
+                    df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
+
+                    df_4217rev = concatenated_df.append(df_4217_final)
+                    
                     def format_nama_cabang(cabang):
                         match = re.match(r"(\d+\.\d+)-[A-Za-z\s\(\)-]+(?:\s\((\w+)\))?", cabang)
                         if match:
                             return f"{int(float(match.group(1)))-1}.{match.group(2)}" if match.group(2) else None
                         else:
                             return cabang
-
-                    df_4217['Nama Cabang'] = df_4217['Nama Cabang'].apply(format_nama_cabang)
-
-                    df_4217_final=df_4217_final[df_4217_final['Kategori']   ==  "Satuan #1"].rename(columns={"Kategori":"Satuan","Total Stock":"Saldo Akhir"})
-
-                    df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan",""]]
-                    df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
-
-                    concatenated_df.append(df_4217_final)
                     
-                concatenated_df = pd.concat(concatenated_df, ignore_index=True)
+                    df_4217rev['Nama Cabang'] = df_4217['Nama Cabang'].apply(format_nama_cabang)
+
+                concatenated_df = pd.concat(df_4217rev, ignore_index=True)
                 excel_data = to_excel(concatenated_df)
                 st.download_button(
                     label="Download Excel",
