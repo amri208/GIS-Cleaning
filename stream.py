@@ -812,7 +812,7 @@ if uploaded_file is not None:
                                 return cabang
                     
                     df_4217_final['Cabang'] = df_4217_final['Nama Cabang'].apply(format_nama_cabang)
-                    df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir"]]
+                    df_4217_final=df_4217_final.loc[:,["No. Urut", "Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir", "Cabang"]]
                     concatenated_df.append(df_4217_final)
 
                 concatenated_df = pd.concat(concatenated_df, ignore_index=True)
