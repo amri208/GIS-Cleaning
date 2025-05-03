@@ -796,9 +796,9 @@ if uploaded_file is not None:
                     df_4217_final['Kode Barang'] = df_4217_final['Kode Barang'].astype('int')
                     df_4217_final['Total Stok'] = df_4217_final['Total Stok'].astype('float')
 
-                    df_4217_final=df_4217_final[df_4217_final['Kategori']   ==  "Satuan #1"].rename(columns={"Kategori":"Satuan","Total Stock":"Saldo Akhir"})
+                    df_4217_final=df_4217_final[df_4217_final['Kategori']   ==  "Satuan #1"].rename(columns={"Kategori":"Satuan","Total Stok":"Saldo Akhir"})
 
-                    #df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir","Nama Cabang"]]
+                    df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir","Nama Cabang"]]
                     df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
                     
                     def format_nama_cabang(cabang):
