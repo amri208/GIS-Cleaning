@@ -775,31 +775,34 @@ if uploaded_file is not None:
                     df_4217 = df_4217.drop(columns=[x for x in df_4217.reset_index().T[(df_4217.reset_index().T[1]=='')].index if 'Unnamed' in x])
                     df_4217.columns = df_4217.T.reset_index()['index'].apply(lambda x: np.nan if 'Unnamed' in x else x).ffill().values
                     df_4217 = df_4217.iloc[1:,:-3]
-                    
-                    df_melted =pd.melt(df_4217, id_vars=['Kode Barang', 'Nama Barang','Kategori Barang'], 
-                        value_vars=df_4217.columns[6:].values,
-                        var_name='Nama Cabang', value_name='Total Stok').reset_index(drop=True)
-    
-                    df_melted2 = pd.melt(pd.melt(df_4217, id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Satuan #1','Satuan #2','Satuan #3'], 
-                        value_vars=df_4217.columns[6:].values,
-                        var_name='Nama Cabang', value_name='Total Stok').drop_duplicates(),
-                        id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Nama Cabang','Total Stok'],
-                        var_name='Variabel', value_name='Satuan')
-    
-                    df_melted2 = df_melted2[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Satuan','Variabel']].drop_duplicates().reset_index(drop=True)
-    
+
+                    df_melted =pd.melt(df_4217, id_vars=['Kode Barang', 'Nama Barang','Kategori Barang'],
+                                        value_vars=df_4217.columns[6:].values,
+                                        var_name='Nama Cabang', value_name='Total Stok').reset_index(drop=True)
+
+                    df_melted2 = pd.melt(pd.melt(df_4217, id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Satuan #1','Satuan #2','Satuan #3'],
+                                        value_vars=df_4217.columns[6:].values,
+                                        var_name='Nama Cabang', value_name='Total Stok').drop_duplicates(),
+                                        id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Nama Cabang','Total Stok'],
+                                        var_name='Variabel', value_name='Satuan')
+
+                    # Mengganti nama kolom 'Satuan' di df_melted2 menjadi 'Nilai Satuan Sementara'
+                    df_melted2 = df_melted2.rename(columns={"Satuan": "Nilai Satuan Sementara"})
+                    df_melted2 = df_melted2[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Nilai Satuan Sementara','Variabel']].drop_duplicates().reset_index(drop=True)
+
                     df_melted = df_melted.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
                     df_melted2 = df_melted2.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
-                    
+
                     df_4217_final = pd.concat([df_melted2, df_melted[['Total Stok']]], axis=1)
-                    df_4217_final = df_4217_final[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Variabel','Satuan','Total Stok']]
+                    df_4217_final = df_4217_final[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Variabel','Nilai Satuan Sementara','Total Stok']]
                     df_4217_final['Kode Barang'] = df_4217_final['Kode Barang'].astype('int')
                     df_4217_final['Total Stok'] = df_4217_final['Total Stok'].astype('float')
 
-                    df_4217_final=df_4217_final[df_4217_final['Variabel']   ==   "Satuan #1"].rename(columns={"Variabel":"Satuan", "Total Stok":"Saldo Akhir"})
+                    # Mengganti nama 'Variabel' menjadi 'Satuan' setelah filtering
+                    df_4217_final=df_4217_final[df_4217_final['Variabel'] == "Satuan #1"].rename(columns={"Variabel":"Satuan", "Total Stok":"Saldo Akhir"})
 
                     df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
-                    
+
                     def format_nama_cabang(cabang):
                         match1 = re.match(r"\((\d+),\s*([A-Z]+)\)", cabang)
                         if match1:
@@ -810,8 +813,9 @@ if uploaded_file is not None:
                                 return f"{match2.group(1)}.{match2.group(2)}"
                             else:
                                 return cabang
-                    
+
                     df_4217_final['Cabang'] = df_4217_final['Nama Cabang'].apply(format_nama_cabang)
+                    # Memilih kolom akhir, menggunakan 'Satuan' (hasil rename dari 'Variabel')
                     df_4217_final=df_4217_final.loc[:,["No. Urut", "Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir", "Cabang"]]
                     concatenated_df.append(df_4217_final)
 
@@ -822,7 +826,7 @@ if uploaded_file is not None:
                     data=excel_data,
                     file_name=f'42.17 (Rev1)_{get_current_time_gmt7()}.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                )   
+                )
                 
             if selected_option == '42.18':
                 concatenated_df = []
