@@ -786,20 +786,18 @@ if uploaded_file is not None:
                                         id_vars=['Kode Barang', 'Nama Barang','Kategori Barang','Nama Cabang','Total Stok'],
                                         var_name='Variabel', value_name='Satuan')
 
-                    # Mengganti nama kolom 'Satuan' di df_melted2 menjadi 'Nilai Satuan Sementara'
-                    df_melted2 = df_melted2.rename(columns={"Satuan": "Nilai Satuan Sementara"})
-                    df_melted2 = df_melted2[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Nilai Satuan Sementara','Variabel']].drop_duplicates().reset_index(drop=True)
+                    df_melted2 = df_melted2[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Satuan','Variabel']].drop_duplicates().reset_index(drop=True)
 
                     df_melted = df_melted.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
                     df_melted2 = df_melted2.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
 
                     df_4217_final = pd.concat([df_melted2, df_melted[['Total Stok']]], axis=1)
-                    df_4217_final = df_4217_final[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Variabel','Nilai Satuan Sementara','Total Stok']]
+                    df_4217_final = df_4217_final[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Variabel','Satuan','Total Stok']]
                     df_4217_final['Kode Barang'] = df_4217_final['Kode Barang'].astype('int')
                     df_4217_final['Total Stok'] = df_4217_final['Total Stok'].astype('float')
 
-                    # Mengganti nama 'Variabel' menjadi 'Satuan' setelah filtering
-                    df_4217_final=df_4217_final[df_4217_final['Variabel'] == "Satuan #1"].rename(columns={"Variabel":"Satuan", "Total Stok":"Saldo Akhir"})
+                    # Mengganti nama 'Satuan' menjadi 'Satuan Akhir' dan 'Total Stok' menjadi 'Saldo Akhir' setelah filtering
+                    df_4217_final=df_4217_final[df_4217_final['Variabel'] == "Satuan #1"].rename(columns={"Satuan":"Satuan Akhir", "Total Stok":"Saldo Akhir"})
 
                     df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
 
@@ -815,8 +813,8 @@ if uploaded_file is not None:
                                 return cabang
 
                     df_4217_final['Cabang'] = df_4217_final['Nama Cabang'].apply(format_nama_cabang)
-                    # Memilih kolom akhir, menggunakan 'Satuan' (hasil rename dari 'Variabel')
-                    df_4217_final=df_4217_final.loc[:,["No. Urut", "Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir", "Cabang"]]
+                    # Memilih kolom akhir, menggunakan 'Satuan Akhir' (hasil rename dari 'Satuan')
+                    df_4217_final=df_4217_final.loc[:,["No. Urut", "Kategori Barang","Kode Barang","Nama Barang","Satuan Akhir","Saldo Akhir", "Cabang"]]
                     concatenated_df.append(df_4217_final)
 
                 concatenated_df = pd.concat(concatenated_df, ignore_index=True)
