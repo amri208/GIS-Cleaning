@@ -792,11 +792,11 @@ if uploaded_file is not None:
                     df_melted2 = df_melted2.sort_values(['Kode Barang','Nama Cabang']).reset_index(drop=True)
                     
                     df_4217_final = pd.concat([df_melted2, df_melted[['Total Stok']]], axis=1)
-                    df_4217_final = df_4217_final.rename(columns={'Variabel':'Kategori'})[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Kategori','Satuan','Total Stok']]
+                    df_4217_final = df_4217_final[['Kode Barang','Nama Barang','Kategori Barang','Nama Cabang','Variabel','Satuan','Total Stok']]
                     df_4217_final['Kode Barang'] = df_4217_final['Kode Barang'].astype('int')
                     df_4217_final['Total Stok'] = df_4217_final['Total Stok'].astype('float')
 
-                    df_4217_final=df_4217_final[df_4217_final['Kategori']   ==  "Satuan #1"].rename(columns={"Kategori":"Satuan","Total Stok":"Saldo Akhir"})
+                    df_4217_final=df_4217_final[df_4217_final['Variabel']   ==  "Satuan #1"].rename(columns={"Total Stok":"Saldo Akhir"})
 
                     df_4217_final=df_4217_final.loc[:,["Kategori Barang","Kode Barang","Nama Barang","Satuan","Saldo Akhir","Nama Cabang"]]
                     df_4217_final.insert(0, 'No. Urut', range(1, len(df_4217_final) + 1))
