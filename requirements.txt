@@ -2,3 +2,4 @@ lxml
 openpyxl
 xlsxwriter
 streamlit_option_menu 
+html5lib
